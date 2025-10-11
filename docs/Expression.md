@@ -12,7 +12,7 @@ Expression (抽象基类)
 ```
 
 #### Expression 类
-```hpp
+```cpp
 class Expression {
 public:
     virtual ~Expression() {}
@@ -21,7 +21,7 @@ public:
 ```
 
 #### ConstExpression 类
-```hpp
+```cpp
 class ConstExpression : public Expression {
 private:
     int value; // 整数常量的值
@@ -32,7 +32,7 @@ public:
 ```
 
 #### VariableExpression 类
-```hpp
+```cpp
 class VariableExpression : public Expression {
 private:
     std::string name; // 变量名
@@ -43,7 +43,7 @@ public:
 ```
 
 #### CompoundExpression 类
-```hpp
+```cpp
 class CompoundExpression : public Expression {
 private:
     std::unique_ptr<Expression> left; // 左子表达式

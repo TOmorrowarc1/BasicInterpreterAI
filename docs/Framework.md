@@ -26,7 +26,7 @@
   - `Basic.cpp`：项目的入口文件，包含 `main` 函数，负责初始化解释器并处理命令行输入，将指令分流到各个处理逻辑中。
   - `Lexer` 模块：由`Lexer.hpp` `Lexer.cpp`构成，负责将输入的字符串分解为一系列的标记（tokens），这些标记是后续解析的基础。
   - `Parser` 模块：由`Parser.hpp` `Parser.cpp`构成，负责将标记序列解析成 `Statement` 类（详情见下）并将内部可能存在的表达式处理为 `Expression` 类·，将结果交付给 `Program` 。
-  - `Program` 模块：由 `Program.hpp` `Program.cpp`构成。向`main`函数提供`run()` `list()` `clear()`接口，向`Parser`模块暴露`addStmt()`接口。内部封装 `PC` `Recorder` `VarState` 等对象，维护非立即执行的"程序"的状态。以`Execute`与`Evaluate`两个分别负责执行语句与计算表达式的私有函数为核心实现接口。
+  - `Program` 模块：由 `Program.hpp` `Program.cpp`构成。向`main`函数提供`run()` `list()` `clear()`接口，向`Parser`模块暴露`addStmt()`接口。内部封装 `PC` `Recorder` `VarState` 等对象，维护非立即执行的"程序"的状态。以`Execute`与`Evaluate`两个分别负责执行语句与计算表达式的私有函数为核心实现接口，而这两个函数主要依靠调用对应的`Statement`与`Expression`类的虚函数实现多态行为。
   - `Recorder` 模块：由 `Recorder.hpp` `Recorder.cpp`构成。负责存储和管理所有的程序行，提供添加、删除、查找等功能。
   - `VarState` 模块：由 `VarState.hpp` `VarState.cpp`构成。负责存储和管理所有变量的值，提供变量赋值和查询功能。
   - `Statement` 类：由 `Statement.hpp` `Statement.cpp`构成。定义了所有支持的语句类型的基类和派生类，每个派生类对应一种具体的语句类型，封装了该语句的相关数据和行为。
