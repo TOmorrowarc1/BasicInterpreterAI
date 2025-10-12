@@ -24,7 +24,7 @@ public:
 	const Statement* get(int line) const;  // 读取语句，不存在返回 nullptr
 	bool hasLine(int line) const;          // 行号是否存在
 	void clear();                          // 清空全部行
-	std::vector<int> listLines() const;    // 返回升序行号，用于 LIST
+	void printLines() const;    	// 输出所有程序，用于 LIST
 
 	int nextLine(int line) const; // 返回大于 line 的最小行号，找不到返回 -1
 
@@ -38,7 +38,7 @@ private:
 
 1. **录入/删除**：`Program::addStmt`/`removeStmt` 直接调用 `add`/`remove`，保持 Recorder 中的数据与最新输入同步。
 2. **运行**：`Program::run` 通过 `begin()/end()` 遍历 `lines`，按 PC 决定执行顺序；跳转类语句可通过 `get` 查询目标行是否存在。
-3. **列出**：`Program::list` 调用 `listLines()` 获取行号序列，再根据需要格式化输出。
+3. **列出**：`Program::list` 调用 `printLines()` 格式化输出程序。
 4. **清空**：`Program::clear` 调用 `clear()`，随后变量由 `VarState::clear()` 处理，两者互不干扰。
 
 ### 最小测试建议
