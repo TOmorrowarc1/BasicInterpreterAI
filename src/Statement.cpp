@@ -61,16 +61,13 @@ void InputStmt::execute(VarState &state, Program &program) const {
 EndStmt::EndStmt(std::string source) : Statement(std::move(source)) {}
 
 void EndStmt::execute(VarState &state, Program &program) const {
-  program.requestStop();
+  program.programEnd();
 }
 
 GotoStmt::GotoStmt(std::string source, int targetLine)
     : Statement(std::move(source)), targetLine_(targetLine) {}
 
 void GotoStmt::execute(VarState &state, Program &program) const {
-  if (!program.hasLine(targetLine_)) {
-    throw BasicError("LINE NUMBER ERROR");
-  }
   program.changePC(targetLine_);
 }
 
@@ -99,9 +96,6 @@ void IfStmt::execute(VarState &state, Program &program) const {
     throw BasicError("INVALID OPERATOR");
   }
   if (condition) {
-    if (!program.hasLine(targetLine_)) {
-      throw BasicError("LINE NUMBER ERROR");
-    }
     program.changePC(targetLine_);
   }
 }
