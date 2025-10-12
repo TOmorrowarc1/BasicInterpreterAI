@@ -22,7 +22,7 @@ Program 作为解释器的运行核心，负责：
 ```cpp
 class Program {
 public:
-	void addStmt(int line, Statement stmt); // 委托 Recorder
+	void addStmt(int line, std::unique_ptr<Statement>&& stmt); // 委托 Recorder
 	void removeStmt(int line);                 // 删除行号
 
 	void run();   // 按行号升序执行，支持 GOTO/IF 改变 PC

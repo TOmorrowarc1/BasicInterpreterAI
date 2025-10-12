@@ -32,7 +32,6 @@ private:
 	std::map<int, std::unique_ptr<Statement>> lines;     // 核心存储：行号 -> 语句指针
 };
 ```
-- `lines` 保证行号有序，满足 LIST 及顺序执行需求。
 
 
 ### 操作流程

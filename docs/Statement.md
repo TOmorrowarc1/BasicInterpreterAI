@@ -5,13 +5,11 @@
 `Statement` 类的继承结构如下：
 ```
 Statement (抽象基类)
-├── SequentialStmt (顺序执行语句)
   ├── RemStmt (注释语句)
   ├── LetStmt (赋值语句)
   ├── PrintStmt (打印语句)
   ├── InputStmt (输入语句)
   ├── EndStmt (结束语句)
-├──ControlStmt (控制流语句)
   ├── GotoStmt (跳转语句)
   └── IfStmt (条件跳转语句)
 ```
@@ -47,7 +45,7 @@ private:
     std::string varName; // 变量名
     std::unique_ptr<Expression> expr; // 赋值表达式
 public:
-    LetStmt(const std::string& originalLine,const std::string &var, std::unique_ptr<Expression> expression);
+    LetStmt(const std::string& originalLine, const std::string &var, std::unique_ptr<Expression> &&expression);
     void execute(VarState &varState, Program &program) const override; // 执行赋值语句
 };
 ```
@@ -58,7 +56,7 @@ class PrintStmt : public Statement {
 private:
     std::unique_ptr<Expression> expr; // 打印表达式
 public:
-    PrintStmt(const std::string& originalLine,std::unique_ptr<Expression> expression);
+    PrintStmt(const std::string& originalLine, std::unique_ptr<Expression> &&expression);
     void execute(VarState &varState, Program &program) const override; // 执行打印语句
 };
 ```
@@ -100,10 +98,10 @@ class IfStmt : public Statement {
 private:
     std::unique_ptr<Expression> left; // 左表达式
     std::unique_ptr<Expression> right; // 右表达式
-    std::string op; // 比较操作符（=、<、>）
+    char op; // 比较操作符（=、<、>）
     int targetLine; // 目标行号
 public:
-    IfStmt(const std::string& originalLine,std::unique_ptr<Expression> lhs, const std::string &oper, std::unique_ptr<Expression> rhs, int line);
+    IfStmt(const std::string& originalLine, std::unique_ptr<Expression> &&lhs, char op, std::unique_ptr<Expression> &&rhs, int line);
     void execute(VarState &varState, Program &program) const override; // 执行条件跳转语句
 };
 ```

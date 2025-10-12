@@ -50,7 +50,7 @@ private:
     std::unique_ptr<Expression> right; // 右子表达式
     char op; // 运算符（+、-、*、/）
 public:
-    CompoundExpression(std::unique_ptr<Expression> lhs, char oper, std::unique_ptr<Expression> rhs);
+    CompoundExpression(std::unique_ptr<Expression> &&lhs, char oper, std::unique_ptr<Expression> &&rhs);
     int evaluate(const VarState& varState);
 }
 ```
