@@ -12,7 +12,8 @@ void Program::addStmt(int line, std::unique_ptr<Statement> &&stmt) {
 void Program::removeStmt(int line) { recorder_.remove(line); }
 
 void Program::run() {
-  int programCounter_ = recorder_.nextLine(-1);
+  programEnd_ = false;
+  programCounter_ = recorder_.nextLine(-1);
   if (programCounter_ == -1) {
     return;
   }
