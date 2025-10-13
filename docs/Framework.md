@@ -36,13 +36,14 @@
 
 更具体的模块见对应的子目录中文档。
 
-## Main() 函数设计
+## main() 实现
 
 `main()` 函数位于 `Basic.cpp` 文件中，负责解释器的初始化和主循环。其主要职责包括：
 - 初始化 `Lexer`、`Parser` 和 `Program` 对象。
 - 读取用户输入的每一行命令。
 - 使用 `Lexer` 将输入行分解为标记序列。
-- 使用 `Parser` 将标记序列解析为 `Statement` 对象。
-- 根据解析结果调用 `Program` 的相应方法（如 `addStmt`、`removeStmt`、`run`、`list`、`clear`）来处理命令。
+- 检查 `TokenStream` 的首个字符，如果是`run`、`list`、`clear`、`quit`或`help`，则直接执行对应的操作，否则进入以下逻辑：
+  - 使用 `Parser` 将标记序列解析为 `Statement` 对象。
+  - 根据解析结果调用 `Program` 的相应方法 - 有标号则`addStmt` 或 `removeStmt`，否则立即执行。
 - 处理解析或执行过程中可能出现的错误，输出相应的错误信息，如果错误跳出循环终止程序。
 - 如果一切正常，继续读取下一行输入，直到遇到 `QUIT` 命令或 EOF。
