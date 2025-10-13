@@ -39,6 +39,13 @@ void Program::clear() {
   programCounter_ = 0;
 }
 
+void Program::execute(std::unique_ptr<Statement> &&stmt) {
+  if (!stmt) {
+    throw BasicError("STATEMENT NULL");
+  }
+  stmt->execute(vars_, *this);
+}
+
 int Program::getPC() const noexcept { return programCounter_; }
 
 void Program::changePC(int line) {

@@ -18,6 +18,8 @@ public:
   void list() const;
   void clear();
 
+  void execute(std::unique_ptr<Statement> &&stmt);
+
   int getPC() const noexcept;
   void changePC(int line);
 	void programEnd();
