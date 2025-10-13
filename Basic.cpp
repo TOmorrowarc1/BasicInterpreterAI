@@ -35,8 +35,6 @@ int main() {
   Parser parser;
   Program program;
 
-  std::cout << "BASIC 解释器已启动。输入 HELP 查看帮助信息。\n";
-
   std::string line;
   while (std::getline(std::cin, line)) {
     if (line.empty()) {
@@ -88,7 +86,5 @@ int main() {
       std::cerr << "错误: " << e.message() << "\n";
     }
   }
-
-  std::cout << "再见!\n";
   return 0;
 }
