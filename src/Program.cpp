@@ -12,23 +12,19 @@ void Program::addStmt(int line, std::unique_ptr<Statement> &&stmt) {
 void Program::removeStmt(int line) { recorder_.remove(line); }
 
 void Program::run() {
-  int currentLine = recorder_.nextLine(-1);
-  if (currentLine == -1) {
+  int programCounter_ = recorder_.nextLine(-1);
+  if (programCounter_ == -1) {
     return;
   }
-  programCounter_ = currentLine;
   while (!programEnd_ && programCounter_ != -1) {
     const Statement *stmt = recorder_.get(programCounter_);
-    programCounter_ = recorder_.nextLine(currentLine);
+    programCounter_ = recorder_.nextLine(programCounter_);
     if (stmt == nullptr) {
       throw BasicError("LINE NUMBER ERROR");
     }
     stmt->execute(vars_, *this);
-    if (!recorder_.hasLine(programCounter_)) {
-      throw BasicError("LINE NUMBER ERROR");
-    }
   }
-  resetAfterRun();
+  // resetAfterRun();
 }
 
 void Program::list() const { recorder_.printLines(); }
