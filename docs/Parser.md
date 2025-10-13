@@ -22,11 +22,11 @@ struct ParsedLine {
 
 class Parser {
 public:
-    ParsedLine parseLine(TokenStream& tokens) const;            // 解析整行输入
+    ParsedLine parseLine(TokenStream& tokens, const std::string& originLine) const;            // 解析整行输入
 
 private:
     // 语句解析分发：TokenStream 依旧通过引用传递，内部获取 Token 时使用指针
-    std::unique_ptr<Statement> parseStatement(TokenStream& tokens) const;
+    std::unique_ptr<Statement> parseStatement(TokenStream& tokens, const std::string& originLine) const;
     std::unique_ptr<Statement> parseLet(TokenStream& tokens) const;
     std::unique_ptr<Statement> parsePrint(TokenStream& tokens) const;
     std::unique_ptr<Statement> parseInput(TokenStream& tokens) const;
@@ -41,6 +41,8 @@ private:
 
     int getPrecedence(TokenType op) const;
     int parseLiteral(const Token* token) const;
+
+    int leftParentCount;  // 用于括号匹配检测
 };
 ```
 - 当 `lineNumber` 存在且 `statement == nullptr` 时表示“删除该行”，反之代表一个立即执行指令。
@@ -49,7 +51,7 @@ private:
 
 #### parseLine() 实现
 1. **行号判定**：首 token 为 `NUMBER` 时解析为行号，记录在 `lineNumber`。若后续无 token，表示删除对应行。
-2. **语句解析**：调用 `parseStatement` 解析剩余 token，生成对应 `Statement` 对象。
+2. **语句解析**：调用 `parseStatement` 解析剩余 token，结合传入的源代码字符串生成对应 `Statement` 对象。
 3. **返回结果**：将 `lineNumber` 与 `statement` 封装在 `ParsedLine` 结构体中返回。
 
 #### parseStatement() 实现
@@ -63,15 +65,17 @@ private:
    - `IF`：表达式 → 比较符 → 表达式 → `THEN` → 行号；
    - `REM`：剩余 token 拼接为注释；
    - `END`：无参数。
+  同样的，如果遇到Token不匹配规则的情况立即抛出错误。
 3. **终结校验**：解析完成后若仍有剩余 token，抛出 `BasicError("SYNTAX ERROR")`。
 
 #### parseExpression() 实现
 - 无参版本调用有参版本，初始优先级设为 0。
-- 采用递归下降 + 优先级爬升（Pratt Parsing）：
-  1. 读取左操作数：数字 → `ConstExpression`，标识符 → `VariableExpression`，左括号 → 递归解析；
-  2. 查看下一个 token 是否为运算符（`+ - * /`），依据 `getPrecedence` 判断是否展开；
+- 采用递归下降 + 优先级爬升：
+  1. 读取左操作数：数字 → `ConstExpression`，标识符 → `VariableExpression`，左括号 → 递归解析，同时将括号层数加一；
+  2. 查看下一个 token 是否为运算符（`+ - * /`），依据 `getPrecedence` 判断是否展开；如果是右括号检测是否与左括号匹配，若是则终止解析，同时消费该右括号，括号层数减一；若否则报错；
   3. 满足条件则消费运算符，解析右操作数（带更高优先级），生成 `CompoundExpression`；
   4. 重复直到遇到更低优先级运算符或流结束。
+  5. 解析出表达式后若括号层数不为零，抛出 `BasicError("MISMATCHED PARENTHESIS")`。
 - `parseLiteral` 将数字 token 文本转换为 `int`，内部先调用一个轻量的范围检查（仅依赖标准库，避免额外状态），若超出 32 位有符号整型范围则抛出`BasicError("INT LITERAL OVERFLOW")`。
 
 ### 测试关键点
