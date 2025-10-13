@@ -43,18 +43,24 @@ InputStmt::InputStmt(std::string source, std::string name)
     : Statement(std::move(source)), name_(std::move(name)) {}
 
 void InputStmt::execute(VarState &state, Program &program) const {
-  std::cout << "? " << '\n';
+  std::cout << " ? ";
   std::string line;
-  if (!std::getline(std::cin, line)) {
-    throw BasicError("INPUT ERROR");
-  }
-  std::istringstream stream(line);
-  int value = 0;
-  char extra = 0;
-  if ((stream >> value) && !(stream >> extra)) {
-    state.setValue(name_, value);
-  } else {
-    throw BasicError("INVAILD NUMBER");
+  while (std::getline(std::cin, line)) {
+    std::istringstream stream(line);
+    int value = 0;
+    char extra = 0;
+    try {
+      if ((stream >> value) && !(stream >> extra)) {
+        state.setValue(name_, value);
+        break;
+      } else {
+        throw BasicError("INVALID NUMBER");
+      }
+    } catch (const BasicError &e) {
+      std::cout << e.message() << '\n';
+      std::cout << " ? ";
+      continue;
+    }
   }
 }
 
