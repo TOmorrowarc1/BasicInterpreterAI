@@ -10,7 +10,7 @@ void VarState::setValue(const std::string &name, int value) {
 int VarState::getValue(const std::string &name) const {
   auto it = values_.find(name);
   if (it == values_.end()) {
-    throw BasicError("VARIABLE " + name + " NOT DEFINED");
+    throw BasicError("VARIABLE NOT DEFINED");
   }
   return it->second;
 }

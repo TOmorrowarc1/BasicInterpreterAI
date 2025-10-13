@@ -56,7 +56,6 @@ int main() {
           continue;
         } else if (firstToken->type == TokenType::CLEAR) {
           program.clear();
-          std::cout << "程序已清除。\n";
           continue;
         } else if (firstToken->type == TokenType::QUIT) {
           break;
@@ -83,7 +82,7 @@ int main() {
         program.execute(std::move(parsedLine.statement));
       }
     } catch (const BasicError &e) {
-      std::cerr << "错误: " << e.message() << "\n";
+      std::cout << e.message() << "\n";
     }
   }
   return 0;
