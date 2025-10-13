@@ -9,7 +9,7 @@
 using namespace std;
 
 // 从 score.cpp 复制的常量和函数
-const string traceFolder = "../test/Test/";
+const string traceFolder = "../test/";
 const string defaultStudentBasic = "./testcode";
 const string defaultStanderBasic = "./Basic-Demo-64bit";
 

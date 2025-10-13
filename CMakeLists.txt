@@ -29,5 +29,4 @@ set(SOURCES
 add_executable(basic ${SOURCES})
 
 # 创建附着式测试程序
-add_executable(attached_test attached_test.cpp)
-target_link_libraries(attached_test)
+add_executable(attached_test AttachedTest.cpp)
