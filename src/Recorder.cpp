@@ -40,7 +40,7 @@ void Recorder::clear() noexcept { lines.clear(); }
 
 void Recorder::printLines() const {
   for (auto it = lines.begin(); it != lines.end(); ++it) {
-    std::cout << it->first << " " << it->second->text() << '\n';
+    std::cout << it->second->text() << '\n';
   }
 }
 

@@ -25,10 +25,6 @@ set(SOURCES
 # 创建可执行文件
 add_executable(basic ${SOURCES})
 
-# 创建测试程序
-add_executable(test_basic test_basic.cpp)
-target_link_libraries(test_basic)
-
 # 创建附着式测试程序
 add_executable(attached_test attached_test.cpp)
 target_link_libraries(attached_test)
