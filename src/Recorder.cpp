@@ -4,14 +4,24 @@
 #include <algorithm>
 #include <iostream>
 
-void Recorder::add(int line, std::unique_ptr<Statement> &&stmt) {
+Recorder::~Recorder() {
+  for (auto it = lines.begin(); it != lines.end(); ++it) {
+    delete it->second;
+  }
+}
+
+void Recorder::add(int line, Statement *stmt) {
   if (line <= 0) {
     throw BasicError("LINE NUMBER ERROR");
   }
   if (!stmt) {
     throw BasicError("STATEMENT NULL");
   }
-  lines[line] = std::move(stmt);
+  auto it = lines.find(line);
+  if (it != lines.end()) {
+    delete it->second;
+  }
+  lines[line] = stmt;
 }
 
 void Recorder::remove(int line) {
@@ -20,6 +30,7 @@ void Recorder::remove(int line) {
   }
   auto it = lines.find(line);
   if (it != lines.end()) {
+    delete it->second;
     lines.erase(it);
   }
 }
@@ -29,14 +40,19 @@ const Statement *Recorder::get(int line) const noexcept {
   if (it == lines.end()) {
     return nullptr;
   }
-  return it->second.get();
+  return it->second;
 }
 
 bool Recorder::hasLine(int line) const noexcept {
   return lines.find(line) != lines.end();
 }
 
-void Recorder::clear() noexcept { lines.clear(); }
+void Recorder::clear() noexcept {
+  for (auto it = lines.begin(); it != lines.end(); ++it) {
+    delete it->second;
+  }
+  lines.clear();
+}
 
 void Recorder::printLines() const {
   for (auto it = lines.begin(); it != lines.end(); ++it) {

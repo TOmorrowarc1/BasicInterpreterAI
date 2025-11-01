@@ -11,14 +11,14 @@ class Program {
 public:
   Program();
 
-  void addStmt(int line, std::unique_ptr<Statement> &&stmt);
+  void addStmt(int line, Statement* stmt);
   void removeStmt(int line);
 
   void run();
   void list() const;
   void clear();
 
-  void execute(std::unique_ptr<Statement> &&stmt);
+  void execute(Statement* stmt);
 
   int getPC() const noexcept;
   void changePC(int line);

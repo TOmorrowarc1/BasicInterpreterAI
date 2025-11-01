@@ -14,6 +14,7 @@ public:
 class ConstExpression : public Expression {
 public:
   explicit ConstExpression(int value);
+  ~ConstExpression() = default;
   int evaluate(const VarState &state) const override;
 
 private:
@@ -23,6 +24,7 @@ private:
 class VariableExpression : public Expression {
 public:
   explicit VariableExpression(std::string name);
+  ~VariableExpression() = default;
   int evaluate(const VarState &state) const override;
 
 private:
@@ -31,12 +33,12 @@ private:
 
 class CompoundExpression : public Expression {
 public:
-  CompoundExpression(std::unique_ptr<Expression> &&left, char op,
-                     std::unique_ptr<Expression> &&right);
+  CompoundExpression(Expression *left, char op, Expression *right);
+  ~CompoundExpression();
   int evaluate(const VarState &state) const override;
 
 private:
-  std::unique_ptr<Expression> left_;
-  std::unique_ptr<Expression> right_;
+  Expression *left_;
+  Expression *right_;
   char op_;
 };

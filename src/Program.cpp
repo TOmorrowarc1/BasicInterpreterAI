@@ -5,9 +5,7 @@
 Program::Program()
     : recorder_(), vars_(), programCounter_(0), programEnd_(false) {}
 
-void Program::addStmt(int line, std::unique_ptr<Statement> &&stmt) {
-  recorder_.add(line, std::move(stmt));
-}
+void Program::addStmt(int line, Statement *stmt) { recorder_.add(line, stmt); }
 
 void Program::removeStmt(int line) { recorder_.remove(line); }
 
@@ -36,7 +34,7 @@ void Program::clear() {
   programCounter_ = 0;
 }
 
-void Program::execute(std::unique_ptr<Statement> &&stmt) {
+void Program::execute(Statement *stmt) {
   if (!stmt) {
     throw BasicError("STATEMENT NULL");
   }

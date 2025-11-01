@@ -35,24 +35,23 @@ private:
 
 class LetStmt : public Statement {
 public:
-  LetStmt(std::string source, std::string name,
-          std::unique_ptr<Expression> &&expression);
-
+  LetStmt(std::string source, std::string name, Expression *expression);
+  ~LetStmt();
   void execute(VarState &state, Program &program) const override;
 
 private:
   std::string name_;
-  std::unique_ptr<Expression> expression_;
+  Expression *expression_;
 };
 
 class PrintStmt : public Statement {
 public:
-  PrintStmt(std::string source, std::unique_ptr<Expression> &&expression);
-
+  PrintStmt(std::string source, Expression *expression);
+  ~PrintStmt();
   void execute(VarState &state, Program &program) const override;
 
 private:
-  std::unique_ptr<Expression> expression_;
+  Expression *expression_;
 };
 
 class InputStmt : public Statement {
@@ -86,14 +85,14 @@ private:
 
 class IfStmt : public Statement {
 public:
-  IfStmt(std::string source, std::unique_ptr<Expression> &&left, char op,
-         std::unique_ptr<Expression> &&right, int targetLine);
-
+  IfStmt(std::string source, Expression *left, char op, Expression *right,
+         int targetLine);
+  ~IfStmt();
   void execute(VarState &state, Program &program) const override;
 
 private:
-  std::unique_ptr<Expression> left_;
-  std::unique_ptr<Expression> right_;
+  Expression *left_;
+  Expression *right_;
   char op_;
   int targetLine_;
 };

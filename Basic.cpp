@@ -69,17 +69,17 @@ int main() {
       ParsedLine parsedLine = parser.parseLine(tokens, line);
 
       // 处理解析结果
-      if (parsedLine.lineNumber.has_value()) {
-        if (parsedLine.statement == nullptr) {
+      if (parsedLine.getLine().has_value()) {
+        if (parsedLine.getStatement() == nullptr) {
           // 删除行
-          program.removeStmt(parsedLine.lineNumber.value());
+          program.removeStmt(parsedLine.getLine().value());
         } else {
           // 添加或替换行
-          program.addStmt(parsedLine.lineNumber.value(),
-                          std::move(parsedLine.statement));
+          program.addStmt(parsedLine.getLine().value(),
+                          parsedLine.fetchStatement());
         }
-      } else if (parsedLine.statement != nullptr) {
-        program.execute(std::move(parsedLine.statement));
+      } else if (parsedLine.getStatement() != nullptr) {
+        program.execute(parsedLine.getStatement());
       }
     } catch (const BasicError &e) {
       std::cout << e.message() << "\n";

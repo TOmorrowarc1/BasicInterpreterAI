@@ -8,7 +8,9 @@
 
 class Recorder {
 public:
-  void add(int line, std::unique_ptr<Statement> &&stmt);
+  ~Recorder();
+
+  void add(int line, Statement *stmt);
   void remove(int line);
   const Statement *get(int line) const noexcept;
   bool hasLine(int line) const noexcept;
@@ -17,5 +19,5 @@ public:
   int nextLine(int line) const noexcept;
 
 private:
-  std::map<int, std::unique_ptr<Statement>> lines;
+  std::map<int, Statement *> lines;
 };

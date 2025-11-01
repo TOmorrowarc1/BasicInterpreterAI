@@ -20,19 +20,21 @@ void RemStmt::execute(VarState &state, Program &program) const {}
 
 const std::string &RemStmt::comment() const noexcept { return comment_; }
 
-LetStmt::LetStmt(std::string source, std::string name,
-                 std::unique_ptr<Expression> &&expression)
+LetStmt::LetStmt(std::string source, std::string name, Expression *expression)
     : Statement(std::move(source)), name_(std::move(name)),
-      expression_(std::move(expression)) {}
+      expression_(expression) {}
+
+LetStmt::~LetStmt() { delete expression_; }
 
 void LetStmt::execute(VarState &state, Program &program) const {
   int value = expression_->evaluate(state);
   state.setValue(name_, value);
 }
 
-PrintStmt::PrintStmt(std::string source,
-                     std::unique_ptr<Expression> &&expression)
-    : Statement(std::move(source)), expression_(std::move(expression)) {}
+PrintStmt::PrintStmt(std::string source, Expression *expression)
+    : Statement(std::move(source)), expression_(expression) {}
+
+PrintStmt::~PrintStmt() { delete expression_; }
 
 void PrintStmt::execute(VarState &state, Program &program) const {
   int value = expression_->evaluate(state);
@@ -79,10 +81,15 @@ void GotoStmt::execute(VarState &state, Program &program) const {
 
 int GotoStmt::target() const noexcept { return targetLine_; }
 
-IfStmt::IfStmt(std::string source, std::unique_ptr<Expression> &&left, char op,
-               std::unique_ptr<Expression> &&right, int targetLine)
-    : Statement(std::move(source)), left_(std::move(left)),
-      right_(std::move(right)), op_(std::move(op)), targetLine_(targetLine) {}
+IfStmt::IfStmt(std::string source, Expression *left, char op, Expression *right,
+               int targetLine)
+    : Statement(std::move(source)), left_(left), right_(right),
+      op_(std::move(op)), targetLine_(targetLine) {}
+
+IfStmt::~IfStmt() {
+  delete left_;
+  delete right_;
+}
 
 void IfStmt::execute(VarState &state, Program &program) const {
   int lhs = left_->evaluate(state);
