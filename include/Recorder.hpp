@@ -19,5 +19,5 @@ public:
   int nextLine(int line) const noexcept;
 
 private:
-  std::map<int, Statement *> lines;
+  // TODO.
 };

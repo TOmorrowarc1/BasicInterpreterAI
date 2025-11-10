@@ -16,17 +16,3 @@ int VarState::getValue(const std::string &name) const {
 }
 
 void VarState::clear() { values_.clear(); }
-
-std::vector<std::pair<std::string, int>> VarState::snapshot() const {
-  std::vector<std::pair<std::string, int>> items;
-  items.reserve(values_.size());
-  for (const auto &entry : values_) {
-    items.emplace_back(entry.first, entry.second);
-  }
-  std::sort(items.begin(), items.end(),
-            [](const std::pair<std::string, int> &lhs,
-               const std::pair<std::string, int> &rhs) {
-              return lhs.first < rhs.first;
-            });
-  return items;
-}
