@@ -8,10 +8,9 @@
 
 using namespace std;
 
-// 从 score.cpp 复制的常量和函数
 const string traceFolder = "../test/";
-const string defaultStudentBasic = "./testcode";
-const string defaultStanderBasic = "./Basic-Demo-64bit";
+const string defaultStudentBasic = "./code";
+const string defaultStanderBasic = "../Basic-Demo-64bit";
 
 const int traceCount = 100;
 const string traces[traceCount] = {
@@ -183,7 +182,6 @@ void showScore() {
 // 附着式测试程序的主函数
 int main(int argc, char **argv) {
     cout << "=== 附着式 BASIC 解释器测试程序 ===" << endl;
-    cout << "本程序将利用 score.cpp 的功能进行测试" << endl;
     cout << "=====================================" << endl;
     
     parseArguments(argc, argv);
