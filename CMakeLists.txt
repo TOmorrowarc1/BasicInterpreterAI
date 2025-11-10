@@ -13,7 +13,7 @@ include_directories(include)
 
 # 源文件
 set(SOURCES
-    Basic.cpp
+    src/Basic.cpp
     src/Expression.cpp
     src/Lexer.cpp
     src/Parser.cpp
@@ -26,7 +26,7 @@ set(SOURCES
 )
 
 # 创建可执行文件
-add_executable(basic ${SOURCES})
+add_executable(code ${SOURCES})
 
 # 创建附着式测试程序
 add_executable(attached_test AttachedTest.cpp)
