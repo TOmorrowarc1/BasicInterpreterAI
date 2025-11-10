@@ -15,9 +15,20 @@ Parser 接收 `Lexer` 生成的 `TokenStream`，并将词法单元转换为语�
 
 ### 公共接口
 ```cpp
-struct ParsedLine {
-    std::optional<int> lineNumber;           // 若存在表示程序行，否则为立即执行程序行
-    std::unique_ptr<Statement> statement;    // 解析出的语句，nullptr 代表删除
+class ParsedLine {
+private:
+    std::optional<int> line_number_;
+    Statement *statement_;
+
+public:
+    ParsedLine();
+    ~ParsedLine();
+
+    void setLine(int line);
+    std::optional<int> getLine();
+    void setStatement(Statement *stmt);
+    Statement *getStatement() const;
+    Statement *fetchStatement();
 };
 
 class Parser {
@@ -26,26 +37,26 @@ public:
 
 private:
     // 语句解析分发：TokenStream 依旧通过引用传递，内部获取 Token 时使用指针
-    std::unique_ptr<Statement> parseStatement(TokenStream& tokens, const std::string& originLine) const;
-    std::unique_ptr<Statement> parseLet(TokenStream& tokens) const;
-    std::unique_ptr<Statement> parsePrint(TokenStream& tokens) const;
-    std::unique_ptr<Statement> parseInput(TokenStream& tokens) const;
-    std::unique_ptr<Statement> parseGoto(TokenStream& tokens) const;
-    std::unique_ptr<Statement> parseIf(TokenStream& tokens) const;
-    std::unique_ptr<Statement> parseRem(TokenStream& tokens) const;
-    std::unique_ptr<Statement> parseEnd(TokenStream& tokens) const;
+    Statement *parseStatement(TokenStream& tokens, const std::string& originLine) const;
+    Statement *parseLet(TokenStream& tokens, const std::string& originLine) const;
+    Statement *parsePrint(TokenStream& tokens, const std::string& originLine) const;
+    Statement *parseInput(TokenStream& tokens, const std::string& originLine) const;
+    Statement *parseGoto(TokenStream& tokens, const std::string& originLine) const;
+    Statement *parseIf(TokenStream& tokens, const std::string& originLine) const;
+    Statement *parseRem(TokenStream& tokens, const std::string& originLine) const;
+    Statement *parseEnd(TokenStream& tokens, const std::string& originLine) const;
 
     // 表达式解析
-    std::unique_ptr<Expression> parseExpression(TokenStream& tokens) const;
-    std::unique_ptr<Expression> parseExpression(TokenStream& tokens, int precedence) const;
+    Expression *parseExpression(TokenStream& tokens) const;
+    Expression *parseExpression(TokenStream& tokens, int precedence) const;
 
     int getPrecedence(TokenType op) const;
     int parseLiteral(const Token* token) const;
 
-    int leftParentCount;  // 用于括号匹配检测
+    mutable int leftParentCount{0};  // 用于括号匹配检测
 };
 ```
-- 当 `lineNumber` 存在且 `statement == nullptr` 时表示“删除该行”，反之代表一个立即执行指令。
+- 当 `line_number_` 存在且 `statement_ == nullptr` 时表示"删除该行"，反之代表一个立即执行指令。
 
 ### 接口实现
 

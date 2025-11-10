@@ -19,17 +19,17 @@ Recorder 负责维护解释器中“带行号的程序”，负责：
 ```cpp
 class Recorder {
 public:
-	void add(int line, std::unique_ptr<Statement>&& stmt); // 插入或覆盖指定行
+	~Recorder();
+	void add(int line, Statement *stmt); // 插入或覆盖指定行
 	void remove(int line);                 // 删除行，不存在则忽略
-	const Statement* get(int line) const;  // 读取语句，不存在返回 nullptr
-	bool hasLine(int line) const;          // 行号是否存在
-	void clear();                          // 清空全部行
+	const Statement* get(int line) const noexcept;  // 读取语句，不存在返回 nullptr
+	bool hasLine(int line) const noexcept;          // 行号是否存在
+	void clear() noexcept;                          // 清空全部行
 	void printLines() const;    	// 输出所有程序，用于 LIST
-
-	int nextLine(int line) const; // 返回大于 line 的最小行号，找不到返回 -1
+	int nextLine(int line) const noexcept; // 返回大于 line 的最小行号，找不到返回 -1
 
 private:
-	std::map<int, std::unique_ptr<Statement>> lines;     // 核心存储：行号 -> 语句指针
+	std::map<int, Statement *> lines;     // 核心存储：行号 -> 语句指针
 };
 ```
 
@@ -37,7 +37,7 @@ private:
 ### 操作流程
 
 1. **录入/删除**：`Program::addStmt`/`removeStmt` 直接调用 `add`/`remove`，保持 Recorder 中的数据与最新输入同步。
-2. **运行**：`Program::run` 通过 `begin()/end()` 遍历 `lines`，按 PC 决定执行顺序；跳转类语句可通过 `get` 查询目标行是否存在。
+2. **运行**：`Program::run` 通过 `nextLine()` 遍历 `lines`，按 PC 决定执行顺序；跳转类语句可通过 `get` 查询目标行是否存在。
 3. **列出**：`Program::list` 调用 `printLines()` 格式化输出程序。
 4. **清空**：`Program::clear` 调用 `clear()`，随后变量由 `VarState::clear()` 处理，两者互不干扰。
 
@@ -46,5 +46,5 @@ private:
 - 插入乱序行号并验证遍历结果为升序；
 - 覆盖已有行后再读取，应返回最新语句；
 - 删除行后再 `get` 返回 `nullptr`；
-- `clear` 清空所有行，`listLines()` 返回空；
+- `clear` 清空所有行，`printLines()` 返回空；
 - `hasLine` 在存在/不存在场景下返回正确结果。

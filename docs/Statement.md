@@ -20,21 +20,24 @@ Statement (抽象基类)
 ```hpp
 class Statement {
 private:
-  std::string originalLine; // 原始输入行，用于print()
+  std::string source_; // 原始输入行，用于text()
 public:
-    virtual ~Statement() {}
-    virtual void execute(VarState &varState, Program &program) const = 0; // 执行语句
+    explicit Statement(std::string source);
+    virtual ~Statement() = default;
+    virtual void execute(VarState &state, Program &program) const = 0; // 执行语句
+    const std::string &text() const noexcept;
 };
-``` 
+```
 
 #### RemStmt 类
 ```hpp
 class RemStmt : public Statement {
 private:
-    std::string comment; // 注释内容
+    std::string comment_; // 注释内容
 public:
-    RemStmt(const std::string& originalLine, const std::string &comm);
-    void execute(VarState &varState, Program &program) const override; // 执行注释语句（无操作）
+    RemStmt(std::string source, std::string comment);
+    void execute(VarState &state, Program &program) const override; // 执行注释语句（无操作）
+    const std::string &comment() const noexcept;
 };
 ```
 
@@ -42,11 +45,12 @@ public:
 ```hpp
 class LetStmt : public Statement {
 private:
-    std::string varName; // 变量名
-    std::unique_ptr<Expression> expr; // 赋值表达式
+    std::string name_; // 变量名
+    Expression *expression_; // 赋值表达式
 public:
-    LetStmt(const std::string& originalLine, const std::string &var, std::unique_ptr<Expression> &&expression);
-    void execute(VarState &varState, Program &program) const override; // 执行赋值语句
+    LetStmt(std::string source, std::string name, Expression *expression);
+    ~LetStmt();
+    void execute(VarState &state, Program &program) const override; // 执行赋值语句
 };
 ```
 
@@ -54,10 +58,11 @@ public:
 ```hpp
 class PrintStmt : public Statement {
 private:
-    std::unique_ptr<Expression> expr; // 打印表达式
+    Expression *expression_; // 打印表达式
 public:
-    PrintStmt(const std::string& originalLine, std::unique_ptr<Expression> &&expression);
-    void execute(VarState &varState, Program &program) const override; // 执行打印语句
+    PrintStmt(std::string source, Expression *expression);
+    ~PrintStmt();
+    void execute(VarState &state, Program &program) const override; // 执行打印语句
 };
 ```
 
@@ -65,10 +70,10 @@ public:
 ```hpp
 class InputStmt : public Statement {
 private:
-    std::string varName; // 变量名
+    std::string name_; // 变量名
 public:
-    InputStmt(const std::string& originalLine,const std::string &var); 
-    void execute(VarState &varState, Program &program) const override; // 执行输入语句
+    InputStmt(std::string source, std::string name);
+    void execute(VarState &state, Program &program) const override; // 执行输入语句
 };
 ```
 
@@ -76,8 +81,8 @@ public:
 ```hpp
 class EndStmt : public Statement {
 public:
-    EndStmt(const std::string& originalLine);
-    void execute(VarState &varState, Program &program) const override; // 执行结束语句
+    explicit EndStmt(std::string source);
+    void execute(VarState &state, Program &program) const override; // 执行结束语句
 };
 ```
 
@@ -85,10 +90,11 @@ public:
 ```hpp
 class GotoStmt : public Statement {
 private:
-    int targetLine; // 目标行号
+    int targetLine_; // 目标行号
 public:
-    GotoStmt(const std::string& originalLine,int line);
-    void execute(VarState &varState, Program &program) const override; // 执行跳转语句
+    GotoStmt(std::string source, int targetLine);
+    void execute(VarState &state, Program &program) const override; // 执行跳转语句
+    int target() const noexcept;
 };
 ```
 
@@ -96,12 +102,13 @@ public:
 ```hpp
 class IfStmt : public Statement {
 private:
-    std::unique_ptr<Expression> left; // 左表达式
-    std::unique_ptr<Expression> right; // 右表达式
-    char op; // 比较操作符（=、<、>）
-    int targetLine; // 目标行号
+    Expression *left_; // 左表达式
+    Expression *right_; // 右表达式
+    char op_; // 比较操作符（=、<、>）
+    int targetLine_; // 目标行号
 public:
-    IfStmt(const std::string& originalLine, std::unique_ptr<Expression> &&lhs, char op, std::unique_ptr<Expression> &&rhs, int line);
-    void execute(VarState &varState, Program &program) const override; // 执行条件跳转语句
+    IfStmt(std::string source, Expression *left, char op, Expression *right, int targetLine);
+    ~IfStmt();
+    void execute(VarState &state, Program &program) const override; // 执行条件跳转语句
 };
 ```
