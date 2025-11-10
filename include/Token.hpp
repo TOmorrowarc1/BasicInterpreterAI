@@ -18,6 +18,8 @@ enum class TokenType {
   CLEAR,
   QUIT,
   HELP,
+  INDENT,
+  DEDENT,
   // Basic lexical units
   IDENTIFIER,
   NUMBER,
@@ -44,22 +46,22 @@ struct Token {
 };
 
 class TokenStream {
-public:
+ public:
   TokenStream() = default;
-  explicit TokenStream(std::vector<Token> &&tokens);
+  explicit TokenStream(std::vector<Token>&& tokens);
 
-  const Token *peek() const;
-  const Token *get();
+  const Token* peek() const;
+  const Token* get();
   bool empty() const;
   void reset();
 
   int position() const;
   int size() const;
 
-  void push(Token &&token);
-  const std::vector<Token> &data() const;
+  void push(Token&& token);
+  const std::vector<Token>& data() const;
 
-private:
+ private:
   std::vector<Token> tokens_{};
   int cursor_{0};
 };

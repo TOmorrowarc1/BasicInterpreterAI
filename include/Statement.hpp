@@ -9,89 +9,103 @@ class Program;
 class VarState;
 
 class Statement {
-public:
+ public:
   explicit Statement(std::string source);
   virtual ~Statement() = default;
 
-  virtual void execute(VarState &state, Program &program) const = 0;
+  virtual void execute(VarState& state, Program& program) const = 0;
 
-  const std::string &text() const noexcept;
+  const std::string& text() const noexcept;
 
-private:
+ private:
   std::string source_;
 };
 
 class RemStmt : public Statement {
-public:
+ public:
   RemStmt(std::string source, std::string comment);
 
-  void execute(VarState &state, Program &program) const override;
+  void execute(VarState& state, Program& program) const override;
 
-  const std::string &comment() const noexcept;
+  const std::string& comment() const noexcept;
 
-private:
+ private:
   std::string comment_;
 };
 
 class LetStmt : public Statement {
-public:
+ public:
   LetStmt(std::string source, std::string name,
-          std::unique_ptr<Expression> &&expression);
+          std::unique_ptr<Expression>&& expression);
 
-  void execute(VarState &state, Program &program) const override;
+  void execute(VarState& state, Program& program) const override;
 
-private:
+ private:
   std::string name_;
   std::unique_ptr<Expression> expression_;
 };
 
 class PrintStmt : public Statement {
-public:
-  PrintStmt(std::string source, std::unique_ptr<Expression> &&expression);
+ public:
+  PrintStmt(std::string source, std::unique_ptr<Expression>&& expression);
 
-  void execute(VarState &state, Program &program) const override;
+  void execute(VarState& state, Program& program) const override;
 
-private:
+ private:
   std::unique_ptr<Expression> expression_;
 };
 
 class InputStmt : public Statement {
-public:
+ public:
   InputStmt(std::string source, std::string name);
 
-  void execute(VarState &state, Program &program) const override;
+  void execute(VarState& state, Program& program) const override;
 
-private:
+ private:
   std::string name_;
 };
 
 class EndStmt : public Statement {
-public:
+ public:
   explicit EndStmt(std::string source);
 
-  void execute(VarState &state, Program &program) const override;
+  void execute(VarState& state, Program& program) const override;
+};
+
+class IndentStmt : public Statement {
+ public:
+  explicit IndentStmt(std::string source);
+
+  void execute(VarState& state, Program& program) const override;
+};
+
+class DedentStmt : public Statement {
+ public:
+  explicit DedentStmt(std::string source);
+
+  void execute(VarState& state, Program& program) const override;
 };
 
 class GotoStmt : public Statement {
-public:
+ public:
   GotoStmt(std::string source, int targetLine);
 
-  void execute(VarState &state, Program &program) const override;
+  void execute(VarState& state, Program& program) const override;
 
   int target() const noexcept;
 
-private:
+ private:
   int targetLine_;
 };
 
 class IfStmt : public Statement {
-public:
-  IfStmt(std::string source, std::unique_ptr<Expression> &&left, char op,
-         std::unique_ptr<Expression> &&right, int targetLine);
+ public:
+  IfStmt(std::string source, std::unique_ptr<Expression>&& left, char op,
+         std::unique_ptr<Expression>&& right, int targetLine);
 
-  void execute(VarState &state, Program &program) const override;
+  void execute(VarState& state, Program& program) const override;
 
-private:
+ private:
   std::unique_ptr<Expression> left_;
   std::unique_ptr<Expression> right_;
   char op_;
