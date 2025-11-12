@@ -12,3 +12,5 @@
 Statement::Statement(std::string source) : source_(std::move(source)) {}
 
 const std::string &Statement::text() const noexcept { return source_; }
+
+// TODO: Imply interfaces declared in the Statement.hpp.

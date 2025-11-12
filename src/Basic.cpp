@@ -19,7 +19,7 @@ int main() {
       continue;
     }
     try {
-      // TODO
+      // TODO: The main function.
     } catch (const BasicError &e) {
       std::cout << e.message() << "\n";
     }

@@ -6,7 +6,7 @@ Lexer 负责把一行 BASIC 源码转换成 `TokenStream`，供 `Parser` 和解�
 - 生成 `Token` 序列并封装为 `TokenStream`；
 - 遇到非法字符时抛出词法错误。
 
-### 依赖关系
+### 依赖模块
 - `Token.md` 中的 `TokenType`、`Token`、`TokenStream`；
 - 标准库 `<string>`、`<vector>`、`<optional>`；
 - 与 `Program`、`Statement`、`Expression` 无直接耦合，仅与 `Parser` 交互。
@@ -28,16 +28,6 @@ public:
 3. 识别数字序列生成 `NUMBER`。
 4. 识别单字符符号：`+ - * / = < > ( ) ,` 等，映射至相应 `TokenType`。
 5. 若遇 `REM`，立即将余下文本作为单一 `REM` Token；
-6. 遇到无法识别的字符，抛出 `LexicalError`，包含原始字符与列号。
+6. 遇到无法识别的字符，抛出错误，包含原始字符与列号。
 7. 将所有 Token 推入 `TokenStream` 并返回。
 
-### 错误处理
-- `LexicalError`：未知字符、数字超范围、缺少成对符号等；
-- `NumberOverflow` ：整数字面量溢出。
-
-### 最小测试建议
-- 关键字、标识符、数字混合的切分；
-- `REM` 行处理是否符合预期；
-- 运算符与括号组合（如 `A=(B+3)*2`）；
-- 连续空白与 Tab 的容错；
-- 遇到非法字符（例如 `@`）时抛出异常。

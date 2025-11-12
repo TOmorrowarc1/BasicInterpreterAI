@@ -18,32 +18,23 @@
     - `QUIT`：退出解释器。
     - `HELP`：打印帮助信息，列出所有支持的命令及其用法。
   
-执行对应命令后，程序会输出相应的结果或提示信息。若遇到错误（如语法错误、运行时错误等），程序会输出错误信息并终止。
+执行对应命令后，程序会输出相应的结果或提示信息。若遇到错误（如语法错误、运行时错误等），程序会输出错误信息并进行相应处理。
 
 ## 项目架构
 
 整个项目结构如下：
   - `Basic.cpp`：项目的入口文件，包含 `main` 函数，负责初始化解释器并处理命令行输入，将指令分流到各个处理逻辑中。
   - `Lexer` 模块：由`Lexer.hpp` `Lexer.cpp`构成，负责将输入的字符串分解为一系列的标记（tokens），这些标记是后续解析的基础。
-  - `Parser` 模块：由`Parser.hpp` `Parser.cpp`构成，负责将标记序列解析成 `Statement` 类（详情见下）并将内部可能存在的表达式处理为 `Expression` 类·，将结果交付给 `Program` 。
-  - `Program` 模块：由 `Program.hpp` `Program.cpp`构成。向`main`函数提供`run()` `list()` `clear()`接口，向`Parser`模块暴露`addStmt()`接口。内部封装 `PC` `Recorder` `VarState` 等对象，维护非立即执行的"程序"的状态。以`Execute`与`Evaluate`两个分别负责执行语句与计算表达式的私有函数为核心实现接口，而这两个函数主要依靠调用对应的`Statement`与`Expression`类的虚函数实现多态行为。
+  - `Parser` 模块：由`Parser.hpp` `Parser.cpp`构成，负责将标记序列解析成 `Statement` 类（详情见下）并将内部可能存在的表达式处理为 `Expression` 类（详情见下），将结果交付给 `main()` 函数。
+  - `Program` 模块：由 `Program.hpp` `Program.cpp`构成。向`main` 函数提供 `run()` `list()` `clear()` `addStmt()` 等接口。内部封装 `PC` `Recorder` `VarState` 等对象，维护非立即执行的"程序"的状态。
   - `Recorder` 模块：由 `Recorder.hpp` `Recorder.cpp`构成。负责存储和管理所有的程序行，提供添加、删除、查找等功能。
   - `VarState` 模块：由 `VarState.hpp` `VarState.cpp`构成。负责存储和管理所有变量的值，提供变量赋值和查询功能。
-  - `Statement` 类：由 `Statement.hpp` `Statement.cpp`构成。定义了所有支持的语句类型的基类和派生类，每个派生类对应一种具体的语句类型，封装了该语句的相关数据和行为。
+  - `Statement` 类：由 `Statement.hpp` `Statement.cpp`构成。定义了所有支持的语句类型的基类和派生类，每个派生类对应一种具体的语句类型，封装了该语句的相关数据和执行时行为。
   - `Expression` 类：由 `Expression.hpp` `Expression.cpp`构成。以树结构处理表达式，定义了表达式的基类和派生类，支持整数常量、变量、二元运算等表达式类型，封装了表达式的计算逻辑。
 
-其中所有`.hpp`在`include`文件夹下，所有`.cpp`在`src`文件夹下，对应的测试点放在`test`文件夹下。
+其中所有`.hpp`在`include/`文件夹下，所有`.cpp`在`src/`文件夹下，所有测试点放在`test/`文件夹下。
 
-更具体的模块见对应的子目录中文档。
+更具体的模块说明见对应文档。
 
 ## main() 实现
-
-`main()` 函数位于 `Basic.cpp` 文件中，负责解释器的初始化和主循环。其主要职责包括：
-- 初始化 `Lexer`、`Parser` 和 `Program` 对象。
-- 读取用户输入的每一行命令。
-- 使用 `Lexer` 将输入行分解为标记序列。
-- 检查 `TokenStream` 的首个字符，如果是`run`、`list`、`clear`、`quit`或`help`，则直接执行对应的操作，否则进入以下逻辑：
-  - 使用 `Parser` 将标记序列解析为 `Statement` 对象。
-  - 根据解析结果调用 `Program` 的相应方法 - 有标号则`addStmt` 或 `removeStmt`，否则立即执行。
-- 处理解析或执行过程中可能出现的错误，输出相应的错误信息，如果错误跳出循环终止程序。
-- 如果一切正常，继续读取下一行输入，直到遇到 `QUIT` 命令或 EOF。
+// TODO

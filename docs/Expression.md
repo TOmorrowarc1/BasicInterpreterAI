@@ -16,7 +16,9 @@ Expression (抽象基类)
 class Expression {
 public:
     virtual ~Expression() = default;
-    virtual int evaluate(const VarState& state) const = 0; // 计算表达式的值
+    
+    // 计算表达式的值
+    virtual int evaluate(const VarState& state) const = 0; 
 };
 ```
 

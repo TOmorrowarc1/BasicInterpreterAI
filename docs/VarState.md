@@ -16,8 +16,8 @@ VarState 用于集中管理解释器在执行期间产生的全部**变量状态
   ```cpp
   std::unordered_map<std::string, int> var_states;
   ```
-- **类型约束**：所有变量为 32 位带符号整型，对应 BASIC 规范。若未来扩展为长整型或浮点型，可通过模板或变体封装。
-- **生命周期**：变量在首次赋值 (`LET`/`INPUT`) 时创建；`clear()` 将整体删除；单变量删除目前不开放接口。
+- **类型约束**：所有变量为 32 位带符号整型，对应 BASIC 规范。
+- **生命周期**：变量在首次赋值 (`LET`/`INPUT`) 时创建；`clear()` 将所有变量删除；单变量删除目前不开放接口。
 
 
 ### 对外接口
@@ -27,31 +27,5 @@ VarState 以轻量级类形式暴露接口，供 `Program`、`Statement`、`Expr
 | 方法签名 | 语义 | 典型调用方 |
 | --- | --- | --- |
 | `void setValue(const std::string& name, int value);` | 更改变量。 | `LetStatement`, `InputStatement` |
-| `int getValue(const std::string& name) const;` | 查询变量，若不存在则抛出 `RuntimeError`（`Program` 捕获并终止执行）。 | `Expression::evaluate`, `IfStatement` |
-| `std::vector<std::pair<std::string, int>> snapshot() const;` | 返回按名称升序的变量快照，用于调试或单元测试，默认按 `rawName` 排序。 | `Program::listVars`（潜在扩展）、测试桩 |
-
-> 说明：`RuntimeError` 类型由 Program 模块统一定义，VarState 只负责构造异常并抛出。
-
-
-### 交互流程
-
-1. **赋值流程**：
-	- Parser 将 `LET`/`INPUT` 生成对应 Statement；
-	- Statement 在执行时调用 `VarState::setValue()`；
-	- VarState 更新映射。
-
-2. **表达式求值**：
-	- `Expression::evaluate` 中读取变量时，通过传入的 `VarState` 调用 `getValue`；
-	- 若变量未初始化，VarState 抛出异常，Program 捕获后输出 `VARIABLE NOT DEFINED` 类错误并终止本次 RUN。
-
-
-### 错误处理
-
-- **未定义变量**：`getValue` 检测不到变量时抛出 `RuntimeError`，错误信息格式建议为 `"VARIABLE <name> NOT DEFINED"`；
-
-### 测试
-
-- 覆盖测试建议：
-  - `setValue` + `getValue` 正常流程；
-  - 未定义变量访问抛错；
-  - 名称大小写混用的兼容性；
+| `int getValue(const std::string& name) const;` | 查询变量，若不存在则抛出错误。 | `Expression::evaluate`, `IfStatement` |
+| 

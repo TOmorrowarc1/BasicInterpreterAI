@@ -1,4 +1,4 @@
-## Token 模块
+## Token 模块设计
 
 ### 职责概览
 
@@ -26,8 +26,6 @@ enum class TokenType {
     UNKNOWN
 };
 ```
-
-> 运算符是否细分为多种 TokenType（如 PLUS/MINUS）或统一归类为 `OPERATOR` 可在实现阶段灵活调整。
 
 ### Token
 
@@ -60,17 +58,11 @@ private:
 };
 ```
 
-- TokenStream 不修改 token 内容，仅负责游标管理；
-- 允许整体移动或复制，方便 Parser 进行回溯。
+- TokenStream 不修改 token 内容，仅负责游标管理。
 
-### 与其他模块的关系
+### 与其他模块交互
 
 - `Lexer`：构造 Token 和 TokenStream；
 - `Parser` ：消费 TokenStream，解析语句/表达式；
 - 解释器主循环：消费TokenStream 进行逻辑的分流；
 
-### 测试建议
-
-- 构造 TokenStream 验证 `peek` / `get` / `reset` 行为；
-- 确认位置访问在移动后正确更新；
-- 复制或移动 TokenStream 后原始数据保持独立。

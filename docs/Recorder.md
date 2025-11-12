@@ -8,10 +8,8 @@ Recorder 负责维护解释器中“带行号的程序”，负责：
 - 提供清空接口，在 `CLEAR` 时清空状态。
 
 
-### 依赖关系
+### 依赖模块
 
-- `Program`：唯一的直接调用者，负责驱动增删查遍历；
-- `Parser`：通过 `Program::addStmt/removeStmt` 间接写入 Recorder；
 - `Statement`：以不透明指针形式存放， Recorder 不关心其内部结构。
 
 ### 数据结构与核心接口
@@ -20,31 +18,34 @@ Recorder 负责维护解释器中“带行号的程序”，负责：
 class Recorder {
 public:
 	~Recorder();
-	void add(int line, Statement *stmt); // 插入或覆盖指定行
-	void remove(int line);                 // 删除行，不存在则忽略
-	const Statement* get(int line) const noexcept;  // 读取语句，不存在返回 nullptr
-	bool hasLine(int line) const noexcept;          // 行号是否存在
-	void clear() noexcept;                          // 清空全部行
-	void printLines() const;    	// 输出所有程序，用于 LIST
-	int nextLine(int line) const noexcept; // 返回大于 line 的最小行号，找不到返回 -1
+
+	// 插入或覆盖指定行。
+	void add(int line, Statement *stmt);
+
+	// 删除行，不存在则无事发生。
+	void remove(int line);   
+
+ 	// 读取行号对应 Stmt ，不存在则返回 nullptr。
+ 	const Statement* get(int line) const noexcept;
+	
+	// 询问行号对应 Stmt 是否存在。
+	bool hasLine(int line) const noexcept;
+
+	// 清空全部行。
+	void clear() noexcept;
+	
+	// 按行号升序输出所有程序。
+	void printLines() const; 
+	
+	// 返回大于 line 的最小行号，不存在则返回 -1。
+	int nextLine(int line) const noexcept; 
 
 private:
-	std::map<int, Statement *> lines;     // 核心存储：行号 -> 语句指针
+	// TODO.
 };
 ```
 
 
-### 操作流程
+### 与其他模块交互
 
-1. **录入/删除**：`Program::addStmt`/`removeStmt` 直接调用 `add`/`remove`，保持 Recorder 中的数据与最新输入同步。
-2. **运行**：`Program::run` 通过 `nextLine()` 遍历 `lines`，按 PC 决定执行顺序；跳转类语句可通过 `get` 查询目标行是否存在。
-3. **列出**：`Program::list` 调用 `printLines()` 格式化输出程序。
-4. **清空**：`Program::clear` 调用 `clear()`，随后变量由 `VarState::clear()` 处理，两者互不干扰。
-
-### 最小测试建议
-
-- 插入乱序行号并验证遍历结果为升序；
-- 覆盖已有行后再读取，应返回最新语句；
-- 删除行后再 `get` 返回 `nullptr`；
-- `clear` 清空所有行，`printLines()` 返回空；
-- `hasLine` 在存在/不存在场景下返回正确结果。
+- `Program`：唯一的直接调用者，负责驱动 Recorder 添加、删除、查找、遍历 Stmt；同时借助 Recorder 实现程序的输出、清除、执行等。
