@@ -3,9 +3,9 @@
 ### 职责概览
 Parser 接收 `Lexer` 生成的 `TokenStream`，并将词法单元转换为语句 (`Statement`) 与表达式 (`Expression`) 对象，关键点如下：
 - 区分带行号的程序语句与立即执行命令；
-- 解析 `LET`、`PRINT`、`INPUT`、`GOTO`、`IF`、`REM`、`END` 等语句并构造对应对象；
+- 解析 `LET`、`PRINT`、`INPUT`、`GOTO`、`IF`、`REM`、`END` 开头的输入并构造**对应的Statement**；
 - 构建算术表达式树，支持变量、整数常量与二元运算；
-- 将解析结果交还 `Program`，由其存入 `Recorder` 或直接执行。
+- 返回解析结果。
 
 ### 依赖关系
 - `Token` 模块中的 `TokenType`、`Token`、`TokenStream`；
