@@ -52,10 +52,10 @@ BASIC 是一门**解释性**编程语言，本次大作业要求你用 C++ 实�
 #### 下发文件
 
 ```plain
-├── docs
+├── docs/
 ├── src/
 │   ├── utils
-│   │   ├── Error.cpp
+│   │   └── Error.cpp
 │   ├── Basic.cpp
 │   ├── Expression.cpp
 │   ├── Lexer.cpp
@@ -64,10 +64,10 @@ BASIC 是一门**解释性**编程语言，本次大作业要求你用 C++ 实�
 │   ├── Recorder.cpp
 │   ├── Statement.cpp
 │   ├── Token.cpp
-│   ├── VarState.cpp
+│   └── VarState.cpp
 ├── include/
 │   ├── utils/
-│   │   ├── Error.hpp
+│   │   └── Error.hpp
 │   ├── Expression.hpp
 │   ├── Lexer.hpp
 │   ├── Parser.hpp
@@ -75,7 +75,7 @@ BASIC 是一门**解释性**编程语言，本次大作业要求你用 C++ 实�
 │   ├── Recorder.hpp
 │   ├── Statement.hpp
 │   ├── Token.hpp
-│   ├── VarState.hpp
+│   └── VarState.hpp
 ├── test/
 ├── Basic-Demo-64bit
 ├── CMakeLists.txt
@@ -143,16 +143,7 @@ BASIC 是一门**解释性**编程语言，本次大作业要求你用 C++ 实�
 
 #### 评测脚本使用方法
 
-使用 CMake 构建，然后运行编译产生的可执行文件即可。
-
-e.g. 命令行中输入：
-```
-cd build && make
-./attached_test（测试 basic 部分）
-./scope_test（测试 bonus 部分）
-```
-
-即可进行本地测试。
+使用 CMake 构建，然后运行编译产生的可执行文件 attached_test（测试 basic 部分）、scope_test（测试 bonus 部分）即可进行本地测试。
 
 【注意：如果你修改了仓库中给出框架的文件结构，请相应修改 `AttachedTest.cpp` 与 `ScopeTest.cpp` 中通过常量输入的相关文件路径，否则无法正常进行本地测试。】
 
@@ -179,14 +170,14 @@ cd build && make
 <a name="18"></a >
 ## 负责助教
 
-[@卓翔]()，[@葛仁澍](https://github.com/TOmorrowarc1)
+[@卓翔](https://github.com/zxsheather)，[@葛仁澍](https://github.com/TOmorrowarc1)
 
 <a name="19"></a >
 ## Special Thanks
 
 感谢 22' ACM HenryHe0123, 22' ACM Irfnfnkemed 提供的文档 `Minimal-BASIC-Interpreter-2023.pdf` 。
 
-感谢 23' ACM [@李林璋](https://github.com/Seven-Streams)，[@王思瀚](https://github.com/leowang000)，[@李方可](https://github.com/algebraic-arima) 所做的代码实现参考。
+感谢 23' ACM [@李林璋](https://github.com/Seven-Streams)，[@王思瀚](https://github.com/leowang000)，[@李方可](https://github.com/algebraic-arima) 提供的代码实现参考。
 
 <a name="20"></a >
 ## Q&A
