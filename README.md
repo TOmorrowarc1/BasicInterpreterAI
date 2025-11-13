@@ -50,118 +50,78 @@ BASIC 是一门**解释性**编程语言，本次大作业要求你用 C++ 实�
 
 <a name="6"></a>
 #### 下发文件
-// TODO:
 
 ```plain
-├── Basic
+├── docs
+├── src/
+│   ├── utils
+│   │   ├── Error.cpp
 │   ├── Basic.cpp
-│   ├── Utils
-│   │   ├── error.cpp
-│   │   ├── error.hpp
-│   │   ├── strlib.cpp
-│   │   ├── strlib.hpp
-│   │   ├── tokenScanner.cpp
-│   │   └── tokenScanner.hpp
-│   ├── evalstate.cpp
-│   ├── evalstate.hpp
-│   ├── exp.cpp
-│   ├── exp.hpp
-│   ├── parser.cpp
-│   ├── parser.hpp
-│   ├── program.cpp
-│   ├── program.hpp
-│   ├── statement.cpp
-│   └── statement.hpp
-├── StanfordCPPLib
-├── Test
+│   ├── Expression.cpp
+│   ├── Lexer.cpp
+│   ├── Parser.cpp
+│   ├── Program.cpp
+│   ├── Recorder.cpp
+│   ├── Statement.cpp
+│   ├── Token.cpp
+│   ├── VarState.cpp
+├── include/
+│   ├── utils/
+│   │   ├── Error.hpp
+│   ├── Expression.hpp
+│   ├── Lexer.hpp
+│   ├── Parser.hpp
+│   ├── Program.hpp
+│   ├── Recorder.hpp
+│   ├── Statement.hpp
+│   ├── Token.hpp
+│   ├── VarState.hpp
+├── test/
 ├── Basic-Demo-64bit
 ├── CMakeLists.txt
 ├── .gitignore
-├── Minimal BASIC Interpreter - 2023.pdf
 ├── README.md
-└── score.cpp
+├── ScopeTest.cpp
+└── AttachedTest.cpp
 ```
 
-##### 需要学习使用的部分
-// TODO
-```plain
-├── Basic
-│   ├── Utils
-│   │   ├── error.cpp
-│   │   ├── error.hpp
-│   │   ├── strlib.cpp
-│   │   ├── strlib.hpp
-│   │   ├── tokenScanner.cpp
-│   │   └── tokenScanner.hpp
-```
-
-这部分文件正常情况下你**不应修改**，如确信这部分文件有问题，请找出问题后向助教反馈。
-
-`Basic/Utils/strlib.hpp` 和 `Basic/Utils/tokenScanner.hpp` 源于 StanfordCPPLib，是在 StanfordCPPLib 基础上进行过修改的版本，基本排除了由于编译器版本导致的问题，同时也基本修复了原代码的 memory leak 问题，使用方法与 StanfordCPPLib 中对应文件相同，请通过阅读文件中的注释，以及查阅官方文档 [The StanfordCPPLib package](https://cs.stanford.edu/people/eroberts/StanfordCPPLib/doc/index.html) 自行学习。
-
-一般来说，你只需要使用 `Basic/Utils/strlib.hpp` 和 `Basic/Utils/tokenScanner.hpp` 。当然，如果你愿意的话，也可以自己使用 StanfordCPPLib 的其它文件(但请务必在使用前仔细阅读说明，并检查是否会造成内存泄漏)。
-
-`error.hpp` 的使用请参考 [C++ 异常处理 - 菜鸟教程](https://www.runoob.com/cplusplus/cpp-exceptions-handling.html)。请务必熟悉代码中的异常处理方法，包括助教给出的代码。
-
-注意：这是助教实现上的设计建议，你可以完全抛开现有框架自己实现，只需在 code review 时与助教说明即可。
-
-##### 需要补充代码的部分
-
-```plain
-├── Basic
-│   ├── Basic.cpp
-│   ├── evalstate.cpp
-│   ├── evalstate.hpp
-│   ├── exp.cpp
-│   ├── exp.hpp
-│   ├── parser.cpp
-│   ├── parser.hpp
-│   ├── program.cpp
-│   ├── program.hpp
-│   ├── statement.cpp
-│   └── statement.hpp
-```
-
-一般来讲，你只需补充 `Basic/Basic.cpp` `Basic/program.hpp` `Basic/program.cpp` `Basic/statement.hpp` `Basic/statement.cpp` 中的代码即可完成作业要求。当然，你也可以根据自己的需要修改其他文件。同时，你也应该仔细学习使用其他文件。
 
 <a name="7"></a>
-#### 解释器实现步骤及待实现文件介绍
+#### 解释器实现说明
 
 **对于指令的介绍和要求详见 `Minimal-BASIC-Interpreter-2023.pdf`** 。
-
-**项目的整体框架详见 [项目文档](docs/Framework.md)** 。
+**项目的整体框架详见 [项目文档](docs/Framework.md)**。
+对于各个文件的具体职责和要求详见`docs/`下的各个模块文档。
+对于bonus的部分详见`docs/Bonus.md`。
 
 <a name="8"></a>
 #### 实现要求
 
 我们会进行基本的**鲁棒性检测**和**内存泄漏检测**，但是不进行性能检测，你只需要通过下发的数据点即可。
 
-<a name="9"></a>
-### Bonus: 四则运算计算器
-
-该作业在[Calculator](Bonus%2FCalculator)文件夹下，要求大家完成一个简单的四则运算计算器，同时大家也会对 std::any 这个语言特性，和 antlr 中的 visitor 方法有一个较为直观的理解。后者将大大有助于各位在之后的编译器项目中快速上手。
-
 <a name="10"></a>
+<a name="10"></a >
 ## 须知
 
-<a name="11"></a>
+<a name="11"></a >
 ### Deadline
-// TODO
-第 12 周 周四 （12.5）18:30
+第 12 周 周一 （12.1）18:30
 
-<a name="12"></a>
+<a name="12"></a >
 ### 本地评测
-// TODO
 ```
 ├── Basic-Demo-64bit
 ├── CMakeLists.txt
-├── Test
-└── score.cpp
+├── test
+├── Attachtest.cpp
+└── Scopetest.cpp
 ```
 
 #### 评测数据
 
-`Test` 文件中的 100 个数据点，这些文件和oj中测评的数据点是相同的。
+`test/` 文件夹中的 100 个数据点，与oj中测评的数据点完全一致。
+
+对于 bonus 中 Scope 嵌入部分另有 `test/scoped/` 文件夹中 20 个数据点，也与OJ 上一致。
 
 #### 评测原理
 
@@ -179,84 +139,66 @@ BASIC 是一门**解释性**编程语言，本次大作业要求你用 C++ 实�
 
 【注：
 
-如果你用的不是 wsl ，而是 mac 或 linux ，在运行 `./Basic-Demo-64bit` 的时候，可能会出现 Permission denied 错误。这时候运行 `chmod +x Basic-Demo-64bit` 应当可以解决此问题。
-
-如果你在wsl下运行 `./Basic-Demo-64bit` 的时候出现 Permission denied 错误，可以先运行 `chmod +x Basic-Demo-64bit` 来修改权限。】
+如果你在wsl下运行 `./Basic-Demo-64bit` 时出现 Permission denied 错误，可以运行 `chmod +x Basic-Demo-64bit` 来修改权限。】
 
 #### 评测脚本使用方法
 
 使用 CMake 构建，然后运行编译产生的可执行文件即可。
-// TODO
-e.g. 命令行中输入：
 
+e.g. 命令行中输入：
 ```
-g++ -o score score.cpp
-./score -f
+cd build && make
+./attached_test（测试 basic 部分）
+./scope_test（测试 bonus 部分）
 ```
 
 即可进行本地测试。
 
-【注意：如果你修改了仓库中给出框架的文件结构，请相应修改 `score.cpp` 中的 `main` 函数中的相关文件路径，否则无法正常进行本地测试。】
+【注意：如果你修改了仓库中给出框架的文件结构，请相应修改 `AttachedTest.cpp` 与 `ScopeTest.cpp` 中通过常量输入的相关文件路径，否则无法正常进行本地测试。】
 
-<a name="16"></a>
+<a name="16"></a >
 ### OJ 评测
 
 你需要使用git进行版本管理和代码提交。比如，你的git仓库地址是 `Your_profile/Your_repo`，你只需要在OJ的提交页面中输入 `https://github.com/Your_profile/Your_repo` 即可。
 
-**注意，你的可执行文件的名字必须为 `code`（如果你修改了Cmake，请务必保证可执行文件名仍为 `code` ）。**
+**注意，你的可执行文件的名字必须为 `code`（如果你修改了CMake，请务必保证可执行文件名仍为 `code` ）。**
 
 测评文件内容默认是 Test 文件夹下提供的文件。这些文件和 oj 中测评的数据点是相同的。在这些测试点下，你的程序需要输出与标程相同的结果。
 
-<a name="17"></a>
+<a name="17"></a >
 ### 评分细则
-//TODO
 
 - 基础任务 80%
   - 按 OJ 得分给分
 - Code Review 20%
-- 增强程序鲁棒性 1% (bonus)
-- 测试点成功攻击他人程序 2% (bonus)
-- 四则运算计算器 3% (bonus)
+- 使用智能指针 1% (bonus)
+- 实现 Scope 嵌入 2% (bonus)
 
 总得分大于 105% 按 105% 计。
 
-<a name="18"></a>
+<a name="18"></a >
 ## 负责助教
 
-[@李林璋](https://github.com/Seven-Streams)，[@王思瀚](https://github.com/leowang000)，[@李方可](https://github.com/algebraic-arima)
+[@卓翔]()，[@葛仁澍](https://github.com/TOmorrowarc1)
 
-<a name="19"></a>
+<a name="19"></a >
 ## Special Thanks
 
 感谢 22' ACM HenryHe0123, 22' ACM Irfnfnkemed 提供的文档 `Minimal-BASIC-Interpreter-2023.pdf` 。
 
-<a name="20"></a>
+感谢 23' ACM [@李林璋](https://github.com/Seven-Streams)，[@王思瀚](https://github.com/leowang000)，[@李方可](https://github.com/algebraic-arima) 所做的代码实现参考。
+
+<a name="20"></a >
 ## Q&A
 
-### 构造测试点时允许数据溢出吗？
-不允许超过int范围。如果出现，那么你的构造数据点bonus不会得分。
-
-### "10 INPUT 10"是合法的吗？
-合法。在这里第二个"10"被视作为一个变量名。但是，假设我们输入了5，**20 PRINT 10**的结果还会是**10**.也就是说，对于完全由数字组成的变量名，我们还是会优先将其解释为数字本身。
-
 ### 数字范围是多少？
-int范围。不支持浮点数。输入浮点数也是不合法的。
+int范围，不支持浮点数。
 
 ### "010 INPUT 10"语句，在LIST指令时行号是否保持前导零？
 要求保持原有格式。无需对行号格式做进一步修改。
 
-### "PRINT-1+1"是合法的吗？
-原则上是合法的。但是，考虑到同学们的工作量，在形如**PRINT**,**INPUT**等之后紧跟着表达式的行为是**未定义**的，也就是说形如**PRINTA**这样的语句，你可以选择解释成**PRINT A**，也可以认为这是个语法错误。
-各位在构造数据点时，不应当使自己构造的数据点中包含这种情况。
-
 ### LET 后面的var = exp之间不加空格是合法的吗？
-这类情况属于未定义行为。大家在构造测试点时要求这之间一定有空格。
-
-### 行号和语句之间不加空格是...？
-未定义。处理同上。
-
-### 关于行首和行末空格？
-未定义行为。处理同上。此外，手册上要求加空格的地方必须加空格，否则也是未定义行为。
+这类情况属于未定义行为，事实上手册上要求加空格的地方没有加空格一律视作未定义行为。
 
 ### 变量命名规范？
-必须由一个或多个数字、大小写字母组成，且不能是关键字（REM，LET，PRINT，INPUT，END，GOTO，IF，THEN，RUN，LIST，CLEAR，QUIT，HELP）。出现其他字符是未定义行为。变量名包含关键字也被视为是未定义行为。
+必须由大小写字母开头，字母与数字组成，且不能是关键字（REM，LET，PRINT，INPUT，END，GOTO，IF，THEN，RUN，LIST，CLEAR，QUIT，HELP）。出现其他字符是未定义行为。变量名包含关键字也被视为是未定义行为。
