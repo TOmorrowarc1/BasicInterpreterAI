@@ -30,3 +30,6 @@ add_executable(code ${SOURCES})
 
 # 创建附着式测试程序
 add_executable(attached_test AttachedTest.cpp)
+
+# 创建Scope测试程序
+add_executable(scope_test ScopeTest.cpp)
