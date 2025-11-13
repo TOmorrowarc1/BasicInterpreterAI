@@ -113,8 +113,8 @@ BASIC 是一门**解释性**编程语言，本次大作业要求你用 C++ 实�
 ├── Basic-Demo-64bit
 ├── CMakeLists.txt
 ├── test
-├── Attachtest.cpp
-└── Scopetest.cpp
+├── AttachTest.cpp
+└── ScopeTest.cpp
 ```
 
 #### 评测数据
