@@ -4,11 +4,11 @@
 #include <string>
 
 class BasicError : public std::runtime_error {
-public:
+ public:
   explicit BasicError(std::string&& message);
 
-  const std::string &message() const noexcept;
+  const std::string& message() const noexcept;
 
-private:
+ private:
   std::string message_;
 };

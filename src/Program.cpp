@@ -1,11 +1,12 @@
 #include "Program.hpp"
+
 #include "Statement.hpp"
 #include "utils/Error.hpp"
 
 Program::Program()
     : recorder_(), vars_(), programCounter_(0), programEnd_(false) {}
 
-void Program::addStmt(int line, std::unique_ptr<Statement> &&stmt) {
+void Program::addStmt(int line, std::unique_ptr<Statement>&& stmt) {
   recorder_.add(line, std::move(stmt));
 }
 
@@ -13,12 +14,13 @@ void Program::removeStmt(int line) { recorder_.remove(line); }
 
 void Program::run() {
   programEnd_ = false;
+  vars_.resetScopes();
   programCounter_ = recorder_.nextLine(-1);
   if (programCounter_ == -1) {
     return;
   }
   while (!programEnd_ && programCounter_ != -1) {
-    const Statement *stmt = recorder_.get(programCounter_);
+    const Statement* stmt = recorder_.get(programCounter_);
     programCounter_ = recorder_.nextLine(programCounter_);
     if (stmt == nullptr) {
       throw BasicError("LINE NUMBER ERROR");
@@ -36,7 +38,7 @@ void Program::clear() {
   programCounter_ = 0;
 }
 
-void Program::execute(std::unique_ptr<Statement> &&stmt) {
+void Program::execute(std::unique_ptr<Statement>&& stmt) {
   if (!stmt) {
     throw BasicError("STATEMENT NULL");
   }

@@ -1,5 +1,5 @@
+#include <cstdio>
 #include <iostream>
-#include <memory>
 #include <string>
 
 #include "Lexer.hpp"
@@ -24,10 +24,14 @@ void printHelp() {
   std::cout << "  [行号] GOTO <行号> - 跳转到指定行\n";
   std::cout
       << "  [行号] IF <表达式1> <操作符> <表达式2> THEN <行号> - 条件跳转\n";
+  std::cout << "  [行号] INDENT - 进入新的作用域块\n";
+  std::cout << "  [行号] DEDENT - 退出当前作用域块\n";
   std::cout << "\n立即执行指令 (不带行号):\n";
   std::cout << "  LET <变量> = <表达式>\n";
   std::cout << "  PRINT <表达式>\n";
   std::cout << "  INPUT <变量>\n";
+  std::cout << "  INDENT\n";
+  std::cout << "  DEDENT\n";
 }
 
 int main() {
@@ -47,7 +51,7 @@ int main() {
 
       // 检查是否为解释器指令
       if (!tokens.empty()) {
-        const Token *firstToken = tokens.peek();
+        const Token* firstToken = tokens.peek();
         if (firstToken->type == TokenType::RUN) {
           program.run();
           continue;
@@ -81,7 +85,7 @@ int main() {
       } else if (parsedLine.statement != nullptr) {
         program.execute(std::move(parsedLine.statement));
       }
-    } catch (const BasicError &e) {
+    } catch (const BasicError& e) {
       std::cout << e.message() << "\n";
     }
   }

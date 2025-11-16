@@ -1,10 +1,11 @@
 #include "Recorder.hpp"
-#include "utils/Error.hpp"
 
 #include <algorithm>
 #include <iostream>
 
-void Recorder::add(int line, std::unique_ptr<Statement> &&stmt) {
+#include "utils/Error.hpp"
+
+void Recorder::add(int line, std::unique_ptr<Statement>&& stmt) {
   if (line <= 0) {
     throw BasicError("LINE NUMBER ERROR");
   }
@@ -24,7 +25,7 @@ void Recorder::remove(int line) {
   }
 }
 
-const Statement *Recorder::get(int line) const noexcept {
+const Statement* Recorder::get(int line) const noexcept {
   auto it = lines.find(line);
   if (it == lines.end()) {
     return nullptr;
